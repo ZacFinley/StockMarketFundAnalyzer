@@ -14,21 +14,21 @@ print 'Opened', sys.argv[1]
 lines = inputFile.readlines()
 count = 1
 # Open file that holds 0-9 year old funds
-zeroNineFile = open("0-9yrFunds.txt", "a")
+zeroNineFile = open("../ageBased/0-9yrFunds.txt", "a")
 # Open file that holds 10-19 year old funds
-tenNineteenFile = open("10-19yrFunds.txt", "a")
+tenNineteenFile = open("../ageBased/10-19yrFunds.txt", "a")
 # Open file that holds 20-29 year old funds
-twentyTwentyNineFile = open("20-29yrFunds.txt", "a")
+twentyTwentyNineFile = open("../ageBased/20-29yrFunds.txt", "a")
 # Open file that holds 30-39 year old funds
-thirtyThirtyNineFile = open("30-39yrFunds.txt", "a")
+thirtyThirtyNineFile = open("../ageBased/30-39yrFunds.txt", "a")
 # Open file that holds 40-49 year old funds
-fortyFortyNineFile = open("40-49yrFunds.txt", "a")
+fortyFortyNineFile = open("../ageBased/40-49yrFunds.txt", "a")
 # Open file that holds 50-59 year old funds
-fiftyFiftyNineFile = open("50-59yrFunds.txt", "a")
+fiftyFiftyNineFile = open("../ageBased/50-59yrFunds.txt", "a")
 # Open file that holds 60+ year old funds
-sixtyPlusFile = open("60yrPlusFunds.txt", "a")
+sixtyPlusFile = open("../ageBased/60yrPlusFunds.txt", "a")
 # Open file for manual review funds
-errorFile = open("errorFile.txt","a")
+errorFile = open("../ageBased/errorFile.txt","a")
 
 
 for currentTicker in lines:
