@@ -51,7 +51,8 @@ def writeHeader(outputFile):
     outputFile.write("Minimum Initial Investment,")
     outputFile.write("Minimum Subsequent Investment,")
     outputFile.write("Mutual Fund,")
-    outputFile.write("ETF")
+    outputFile.write("ETF,")
+    outputFile.write("Capture Date")
     outputFile.write("\n")
 
 # Open file that holds 0-9 year old funds
@@ -308,13 +309,12 @@ for currentTicker in lines:
         outputFile.write(minInitInv + ",")
         outputFile.write(minSubInv + ",")
         outputFile.write(str(isMutualFund) + ",")
-        outputFile.write(str(isEtf))
+        outputFile.write(str(isEtf) + ",")
+        outputFile.write(datetime.today().strftime('%Y-%m-%d'))
         outputFile.write("\n")
     else:
         errorFile.write(currentTicker)
-    print count,'of',len(lines)
-    print len(lines)-count,'Remaining'
-    print datetime.datetime.now()
+    print count,'of',len(lines),'|',len(lines)-count,'Remaining',datetime.today().strftime('%Y-%m-%d')
     count+=1
     continue
 
