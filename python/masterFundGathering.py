@@ -97,6 +97,7 @@ for currentTicker in lines:
     driver.get('https://finance.yahoo.com/quote/' + currentTicker + '/profile?p=' + currentTicker)
     try:
         name = driver.find_element_by_xpath('//*[@id="Col1-0-Profile-Proxy"]/section/div[1]/div[1]/h3').text
+        name = name.replace(',', '')
         price = driver.find_element_by_xpath('//*[@id="quote-header-info"]/div[3]/div[1]/div/span[1]').text
         price = price.replace(',', '')
         # Take the last char off it is a '%'
