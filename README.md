@@ -1,7 +1,9 @@
 To get the fund ticker symbols go to: https://www.marketwatch.com/tools/mutual-fund/list/A
 
 CREATE DATABASE USA_Funds;
+
 USE USA_Funds;
+
 CREATE TABLE funds
 (
 ticker VARCHAR(5),
@@ -41,7 +43,7 @@ perf_three_yr_percent DOUBLE(5,2),
 perf_five_yr_percent DOUBLE(5,2),
 perf_ten_yr_percent DOUBLE(5,2),
 perf_life_percent DOUBLE(5,2),
-min_init_inv SMALLINT(5),
+min_init_inv SMALLINT(6),
 min_subsequent_inv SMALLINT(4),
 mutual_fund BOOLEAN,
 etf BOOLEAN,
