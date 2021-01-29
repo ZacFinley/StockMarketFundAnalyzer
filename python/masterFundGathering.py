@@ -270,7 +270,7 @@ for currentTicker in lines:
         print('added to 60+')
 
     if (not hasError):
-        outputFile.write(currentTicker.rstrip("\n") + ",")
+        outputFile.write(currentTicker.rstrip() + ",")
         outputFile.write(name + ",")
         outputFile.write(price + ",")
         outputFile.write(expenseRatio + ",")
