@@ -56,28 +56,28 @@ def writeHeader(outputFile):
     outputFile.write("\n")
 
 # Open file that holds 0-9 year old funds
-zeroNineFile = open("../ageBasedFlatFiles/0-9yrFunds.csv", "a")
+#zeroNineFile = open("../ageBasedFlatFiles/0-9yrFunds.csv", "a")
 #writeHeader(zeroNineFile)
 # Open file that holds 10-19 year old funds
-tenNineteenFile = open("../ageBasedFlatFiles/10-19yrFunds.csv", "a")
+#tenNineteenFile = open("../ageBasedFlatFiles/10-19yrFunds.csv", "a")
 #writeHeader(tenNineteenFile)
 # Open file that holds 20-29 year old funds
-twentyTwentyNineFile = open("../ageBasedFlatFiles/20-29yrFunds.csv", "a")
+#twentyTwentyNineFile = open("../ageBasedFlatFiles/20-29yrFunds.csv", "a")
 #writeHeader(twentyTwentyNineFile)
 # Open file that holds 30-39 year old funds
-thirtyThirtyNineFile = open("../ageBasedFlatFiles/30-39yrFunds.csv", "a")
+#thirtyThirtyNineFile = open("../ageBasedFlatFiles/30-39yrFunds.csv", "a")
 #writeHeader(thirtyThirtyNineFile)
 # Open file that holds 40-49 year old funds
-fortyFortyNineFile = open("../ageBasedFlatFiles/40-49yrFunds.csv", "a")
+#fortyFortyNineFile = open("../ageBasedFlatFiles/40-49yrFunds.csv", "a")
 #writeHeader(fortyFortyNineFile)
 # Open file that holds 50-59 year old funds
-fiftyFiftyNineFile = open("../ageBasedFlatFiles/50-59yrFunds.csv", "a")
+#fiftyFiftyNineFile = open("../ageBasedFlatFiles/50-59yrFunds.csv", "a")
 #writeHeader(fiftyFiftyNineFile)
 # Open file that holds 60+ year old funds
-sixtyPlusFile = open("../ageBasedFlatFiles/60yrPlusFunds.csv", "a")
+#sixtyPlusFile = open("../ageBasedFlatFiles/60yrPlusFunds.csv", "a")
 #writeHeader(sixtyPlusFile)
 # Open file for manual review funds
-errorFile = open("../ageBasedFlatFiles/errorFile.txt","a")
+#errorFile = open("../ageBasedFlatFiles/errorFile.txt","a")
 
 now = datetime.datetime.now()
 isMutualFund = False
@@ -92,23 +92,25 @@ count = 1
 
 for currentTicker in lines:
     currentTicker = currentTicker.rstrip("\n")
-#     Profile
-    driver = webdriver.Chrome()
-    driver.get('https://finance.yahoo.com/quote/' + currentTicker + '/profile?p=' + currentTicker)
+    # Profile driver
+    driverProfile = webdriver.Chrome()
+    driverProfile.get('https://finance.yahoo.com/quote/' + currentTicker + '/profile?p=' + currentTicker)
+    
+    # Profile
     try:
-        name = driver.find_element_by_xpath('//*[@id="Col1-0-Profile-Proxy"]/section/div[1]/div[1]/h3').text
+        name = driverProfile.find_element_by_xpath('//*[@id="Col1-0-Profile-Proxy"]/section/div[1]/div[1]/h3').text
         name = name.replace(',', '')
-        price = driver.find_element_by_xpath('//*[@id="quote-header-info"]/div[3]/div[1]/div/span[1]').text
+        price = driverProfile.find_element_by_xpath('//*[@id="quote-header-info"]/div[3]/div[1]/div/span[1]').text
         price = price.replace(',', '')
         # Take the last char off it is a '%'
-        expenseRatio = driver.find_element_by_xpath('//*[@id="Col1-0-Profile-Proxy"]/section/div[2]/div[3]/div/div[2]/span[2]').text[:-1]
-        category = driver.find_element_by_xpath('//*[@id="Col1-0-Profile-Proxy"]/section/div[2]/div[1]/div/div[1]/span[2]').text
-        morningStar = len(driver.find_element_by_xpath('//*[@id="Col1-0-Profile-Proxy"]/section/div[2]/div[1]/div/div[6]/span[2]/span').text)
-        netAssets = driver.find_element_by_xpath('//*[@id="Col1-0-Profile-Proxy"]/section/div[2]/div[1]/div/div[3]/span[2]').text
+        expenseRatio = driverProfile.find_element_by_xpath('//*[@id="Col1-0-Profile-Proxy"]/section/div[2]/div[3]/div/div[2]/span[2]').text[:-1]
+        category = driverProfile.find_element_by_xpath('//*[@id="Col1-0-Profile-Proxy"]/section/div[2]/div[1]/div/div[1]/span[2]').text
+        morningStar = len(driverProfile.find_element_by_xpath('//*[@id="Col1-0-Profile-Proxy"]/section/div[2]/div[1]/div/div[6]/span[2]/span').text)
+        netAssets = driverProfile.find_element_by_xpath('//*[@id="Col1-0-Profile-Proxy"]/section/div[2]/div[1]/div/div[3]/span[2]').text
         # Take the last char off it is a '%'
-        holdingsTurnover = driver.find_element_by_xpath('//*[@id="Col1-0-Profile-Proxy"]/section/div[2]/div[2]/div/div[3]/span[2]').text[:-1]
+        holdingsTurnover = driverProfile.find_element_by_xpath('//*[@id="Col1-0-Profile-Proxy"]/section/div[2]/div[2]/div/div[3]/span[2]').text[:-1]
         # Date format YYYY-MM-DD
-        inceptionDate = driver.find_element_by_xpath('//*[@id="Col1-0-Profile-Proxy"]/section/div[2]/div[1]/div/div[7]/span[2]/span').text
+        inceptionDate = driverProfile.find_element_by_xpath('//*[@id="Col1-0-Profile-Proxy"]/section/div[2]/div[1]/div/div[7]/span[2]/span').text
         if "-" not in inceptionDate and "." not in inceptionDate:
             tempDate = inceptionDate.split()
             tempYear = tempDate[2]
@@ -141,136 +143,147 @@ for currentTicker in lines:
             elif "Dec" in tempMonth:
                 tempMonth = "12"
             inceptionDate = (tempYear + "-" + tempMonth + "-" + tempDay)
-        fundFamily = driver.find_element_by_xpath('//*[@id="Col1-0-Profile-Proxy"]/section/div[2]/div[1]/div/div[2]/span[2]').text
+        fundFamily = driverProfile.find_element_by_xpath('//*[@id="Col1-0-Profile-Proxy"]/section/div[2]/div[1]/div/div[2]/span[2]').text
     except NoSuchElementException:
         hasError = True
         print(currentTicker + ' Profile Error')
-
-    driver.quit()
 
     if "ETF" in name:
         isEtf = True
     else:
         isMutualFund = True
 
+    driverProfile.quit()
+    print "25%",
+    sys.stdout.flush()
+
+    # Holdings driver
+    driverHoldings = webdriver.Chrome()
+    driverHoldings.get('https://finance.yahoo.com/quote/' + currentTicker + '/holdings?p=' + currentTicker)
 
     # Holdings
-    driver = webdriver.Chrome()
-    driver.get('https://finance.yahoo.com/quote/' + currentTicker + '/holdings?p=' + currentTicker)
     # Overall Portfolio Composition %
     try:
-        cash = driver.find_element_by_xpath('//*[@id="Col1-0-Holdings-Proxy"]/section/div[1]/div[1]/div/div[1]/span[2]').text[:-1]
+        cash = driverHoldings.find_element_by_xpath('//*[@id="Col1-0-Holdings-Proxy"]/section/div[1]/div[1]/div/div[1]/span[2]').text[:-1]
     except NoSuchElementException:
         cash = 0
         print(currentTicker + 'Holdings Cash Error')
 
     try:
-        stocks = driver.find_element_by_xpath('//*[@id="Col1-0-Holdings-Proxy"]/section/div[1]/div[1]/div/div[2]/span[2]').text[:-1]
+        stocks = driverHoldings.find_element_by_xpath('//*[@id="Col1-0-Holdings-Proxy"]/section/div[1]/div[1]/div/div[2]/span[2]').text[:-1]
     except NoSuchElementException:
         stocks = 0
         print(currentTicker + 'Holdings Stocks Error')
 
     try:
-        bonds = driver.find_element_by_xpath('//*[@id="Col1-0-Holdings-Proxy"]/section/div[1]/div[1]/div/div[3]/span[2]').text[:-1]
+        bonds = driverHoldings.find_element_by_xpath('//*[@id="Col1-0-Holdings-Proxy"]/section/div[1]/div[1]/div/div[3]/span[2]').text[:-1]
     except NoSuchElementException:
         bonds = 0
         print(currentTicker + 'Holdings Bonds Error')
 
     try:
-        others = driver.find_element_by_xpath('//*[@id="Col1-0-Holdings-Proxy"]/section/div[1]/div[1]/div/div[4]/span[2]').text[:-1]
+        others = driverHoldings.find_element_by_xpath('//*[@id="Col1-0-Holdings-Proxy"]/section/div[1]/div[1]/div/div[4]/span[2]').text[:-1]
     except NoSuchElementException:
         others = 0
         print(currentTicker + 'Holdings Others Error')
 
     try:
-        preferred = driver.find_element_by_xpath('//*[@id="Col1-0-Holdings-Proxy"]/section/div[1]/div[1]/div/div[5]/span[2]').text[:-1]
+        preferred = driverHoldings.find_element_by_xpath('//*[@id="Col1-0-Holdings-Proxy"]/section/div[1]/div[1]/div/div[5]/span[2]').text[:-1]
     except NoSuchElementException:
         preferred = 0
         print(currentTicker + 'Holdings Preferred Error')
 
     try:
-        convertable = driver.find_element_by_xpath('//*[@id="Col1-0-Holdings-Proxy"]/section/div[1]/div[1]/div/div[6]/span[2]').text[:-1]
+        convertable = driverHoldings.find_element_by_xpath('//*[@id="Col1-0-Holdings-Proxy"]/section/div[1]/div[1]/div/div[6]/span[2]').text[:-1]
     except NoSuchElementException:
         convertable = 0
         print(currentTicker + 'Holdings Convertable Error')
 
     # Sector Weightings %
     try:
-        basicMaterials = driver.find_element_by_xpath('//*[@id="Col1-0-Holdings-Proxy"]/section/div[1]/div[2]/div/div[2]/span[3]').text[:-1]
-        consumerCyclical = driver.find_element_by_xpath('//*[@id="Col1-0-Holdings-Proxy"]/section/div[1]/div[2]/div/div[3]/span[3]').text[:-1]
-        financialServices = driver.find_element_by_xpath('//*[@id="Col1-0-Holdings-Proxy"]/section/div[1]/div[2]/div/div[4]/span[3]').text[:-1]
-        realestate = driver.find_element_by_xpath('//*[@id="Col1-0-Holdings-Proxy"]/section/div[1]/div[2]/div/div[5]/span[3]').text[:-1]
-        consumerDefensive = driver.find_element_by_xpath('//*[@id="Col1-0-Holdings-Proxy"]/section/div[1]/div[2]/div/div[6]/span[3]').text[:-1]
-        healthcare = driver.find_element_by_xpath('//*[@id="Col1-0-Holdings-Proxy"]/section/div[1]/div[2]/div/div[7]/span[3]').text[:-1]
-        utilities = driver.find_element_by_xpath('//*[@id="Col1-0-Holdings-Proxy"]/section/div[1]/div[2]/div/div[8]/span[3]').text[:-1]
-        communicationServices = driver.find_element_by_xpath('//*[@id="Col1-0-Holdings-Proxy"]/section/div[1]/div[2]/div/div[9]/span[3]').text[:-1]
-        energy = driver.find_element_by_xpath('//*[@id="Col1-0-Holdings-Proxy"]/section/div[1]/div[2]/div/div[10]/span[3]').text[:-1]
-        industrials = driver.find_element_by_xpath('//*[@id="Col1-0-Holdings-Proxy"]/section/div[1]/div[2]/div/div[11]/span[3]').text[:-1]
-        technology = driver.find_element_by_xpath('//*[@id="Col1-0-Holdings-Proxy"]/section/div[1]/div[2]/div/div[12]/span[3]').text[:-1]
+        basicMaterials = driverHoldings.find_element_by_xpath('//*[@id="Col1-0-Holdings-Proxy"]/section/div[1]/div[2]/div/div[2]/span[3]').text[:-1]
+        consumerCyclical = driverHoldings.find_element_by_xpath('//*[@id="Col1-0-Holdings-Proxy"]/section/div[1]/div[2]/div/div[3]/span[3]').text[:-1]
+        financialServices = driverHoldings.find_element_by_xpath('//*[@id="Col1-0-Holdings-Proxy"]/section/div[1]/div[2]/div/div[4]/span[3]').text[:-1]
+        realestate = driverHoldings.find_element_by_xpath('//*[@id="Col1-0-Holdings-Proxy"]/section/div[1]/div[2]/div/div[5]/span[3]').text[:-1]
+        consumerDefensive = driverHoldings.find_element_by_xpath('//*[@id="Col1-0-Holdings-Proxy"]/section/div[1]/div[2]/div/div[6]/span[3]').text[:-1]
+        healthcare = driverHoldings.find_element_by_xpath('//*[@id="Col1-0-Holdings-Proxy"]/section/div[1]/div[2]/div/div[7]/span[3]').text[:-1]
+        utilities = driverHoldings.find_element_by_xpath('//*[@id="Col1-0-Holdings-Proxy"]/section/div[1]/div[2]/div/div[8]/span[3]').text[:-1]
+        communicationServices = driverHoldings.find_element_by_xpath('//*[@id="Col1-0-Holdings-Proxy"]/section/div[1]/div[2]/div/div[9]/span[3]').text[:-1]
+        energy = driverHoldings.find_element_by_xpath('//*[@id="Col1-0-Holdings-Proxy"]/section/div[1]/div[2]/div/div[10]/span[3]').text[:-1]
+        industrials = driverHoldings.find_element_by_xpath('//*[@id="Col1-0-Holdings-Proxy"]/section/div[1]/div[2]/div/div[11]/span[3]').text[:-1]
+        technology = driverHoldings.find_element_by_xpath('//*[@id="Col1-0-Holdings-Proxy"]/section/div[1]/div[2]/div/div[12]/span[3]').text[:-1]
     except NoSuchElementException:
         hasError = True
         print(currentTicker + ' Sector Weighting Error')
 
-    driver.quit()
-    
+    driverHoldings.quit()
+    print "\r50%",
+    sys.stdout.flush()
+
+    # Performance driver
+    driverPerformance = webdriver.Chrome()
+    driverPerformance.get('https://finance.yahoo.com/quote/' + currentTicker + '/performance?p=' + currentTicker)
+
     # Performance
-    driver = webdriver.Chrome()
-    driver.get('https://finance.yahoo.com/quote/' + currentTicker + '/performance?p=' + currentTicker)
     try:
-        numOfYearsUp = driver.find_element_by_xpath('//*[@id="Col1-0-Performance-Proxy"]/section/div[1]/div/div[1]/div[4]/span[2]').text
-        numOfYearsDown = driver.find_element_by_xpath('//*[@id="Col1-0-Performance-Proxy"]/section/div[1]/div/div[1]/div[5]/span[2]').text
-        yearToDate = driver.find_element_by_xpath('//*[@id="Col1-0-Performance-Proxy"]/section/div[2]/div/div[2]/span[2]').text[:-1]
-        oneMonth = driver.find_element_by_xpath('//*[@id="Col1-0-Performance-Proxy"]/section/div[2]/div/div[3]/span[2]').text[:-1]
-        threeMonth = driver.find_element_by_xpath('//*[@id="Col1-0-Performance-Proxy"]/section/div[2]/div/div[4]/span[2]').text[:-1]
-        oneYear = driver.find_element_by_xpath('//*[@id="Col1-0-Performance-Proxy"]/section/div[2]/div/div[5]/span[2]').text[:-1]
-        threeYear = driver.find_element_by_xpath('//*[@id="Col1-0-Performance-Proxy"]/section/div[2]/div/div[6]/span[2]').text[:-1]
-        fiveYear = driver.find_element_by_xpath('//*[@id="Col1-0-Performance-Proxy"]/section/div[2]/div/div[7]/span[2]').text[:-1]
-        tenYear = driver.find_element_by_xpath('//*[@id="Col1-0-Performance-Proxy"]/section/div[2]/div/div[8]/span[2]').text[:-1]
-#       sinceInception = driver.find_element_by_xpath("").text
+        numOfYearsUp = driverPerformance.find_element_by_xpath('//*[@id="Col1-0-Performance-Proxy"]/section/div[1]/div/div[1]/div[4]/span[2]').text
+        numOfYearsDown = driverPerformance.find_element_by_xpath('//*[@id="Col1-0-Performance-Proxy"]/section/div[1]/div/div[1]/div[5]/span[2]').text
+        yearToDate = driverPerformance.find_element_by_xpath('//*[@id="Col1-0-Performance-Proxy"]/section/div[2]/div/div[2]/span[2]').text[:-1]
+        oneMonth = driverPerformance.find_element_by_xpath('//*[@id="Col1-0-Performance-Proxy"]/section/div[2]/div/div[3]/span[2]').text[:-1]
+        threeMonth = driverPerformance.find_element_by_xpath('//*[@id="Col1-0-Performance-Proxy"]/section/div[2]/div/div[4]/span[2]').text[:-1]
+        oneYear = driverPerformance.find_element_by_xpath('//*[@id="Col1-0-Performance-Proxy"]/section/div[2]/div/div[5]/span[2]').text[:-1]
+        threeYear = driverPerformance.find_element_by_xpath('//*[@id="Col1-0-Performance-Proxy"]/section/div[2]/div/div[6]/span[2]').text[:-1]
+        fiveYear = driverPerformance.find_element_by_xpath('//*[@id="Col1-0-Performance-Proxy"]/section/div[2]/div/div[7]/span[2]').text[:-1]
+        tenYear = driverPerformance.find_element_by_xpath('//*[@id="Col1-0-Performance-Proxy"]/section/div[2]/div/div[8]/span[2]').text[:-1]
+#       sinceInception = driverPerformance.find_element_by_xpath("").text
     except NoSuchElementException:
         hasError = True
         print(currentTicker + ' Performance Error')
 
-    driver.quit()
+    driverPerformance.quit()
+    print "\r75%",
+    sys.stdout.flush()
+    # Purchase Info driver
+    driverPurchInfo = webdriver.Chrome()
+    driverPurchInfo.get('https://finance.yahoo.com/quote/' + currentTicker + '/purchase-info?p=' + currentTicker)
 
     # Purchase Info
-    driver = webdriver.Chrome()
-    driver.get('https://finance.yahoo.com/quote/' + currentTicker + '/purchase-info?p=' + currentTicker)
     try:
-        minInitInv = driver.find_element_by_xpath('//*[@id="Col1-0-PurchaseInfo-Proxy"]/section/div[1]/div/div[1]/div[1]/span[2]').text
+        minInitInv = driverPurchInfo.find_element_by_xpath('//*[@id="Col1-0-PurchaseInfo-Proxy"]/section/div[1]/div/div[1]/div[1]/span[2]').text
         minInitInv = minInitInv.replace(',', '')
-        minSubInv = driver.find_element_by_xpath('//*[@id="Col1-0-PurchaseInfo-Proxy"]/section/div[1]/div/div[2]/div[1]/span[2]').text
+        minSubInv = driverPurchInfo.find_element_by_xpath('//*[@id="Col1-0-PurchaseInfo-Proxy"]/section/div[1]/div/div[2]/div[1]/span[2]').text
         minSubInv = minSubInv.replace(',', '')
     except NoSuchElementException:
         hasError = True
         print(currentTicker + ' Purchase Info Error')
-    driver.quit()
+
+    driverPurchInfo.quit()
 
     fundAge = (now.year - int(inceptionDate[:4]))
     if fundAge >= 0 and fundAge < 10:
-        outputFile = zeroNineFile
-        print('added to 0-9')
+        outputFile = open("../ageBasedFlatFiles/0-9yrFunds.csv", "a")
+        print('\radded to 0-9')
     if fundAge >= 10 and fundAge < 20:
-        outputFile = tenNineteenFile
-        print('added to 10-19')
+        outputFile = open("../ageBasedFlatFiles/10-19yrFunds.csv", "a")
+        print('\radded to 10-19')
     if fundAge >= 20 and fundAge < 30:
-        outputFile = twentyTwentyNineFile
-        print('added to 20-29')
+        outputFile = open("../ageBasedFlatFiles/20-29yrFunds.csv", "a")
+        print('\radded to 20-29')
     if fundAge >= 30 and fundAge < 40:
-        outputFile = thirtyThirtyNineFile
-        print('added to 30-39')
+        outputFile = open("../ageBasedFlatFiles/30-39yrFunds.csv", "a")
+        print('\radded to 30-39')
     if fundAge >= 40 and fundAge < 50:
-        outputFile = fortyFortyNineFile
-        print('added to 40-49')
+        outputFile = open("../ageBasedFlatFiles/40-49yrFunds.csv", "a")
+        print('\radded to 40-49')
     if fundAge >= 50 and fundAge < 60:
-        outputFile = fiftyFiftyNineFile
-        print('added to 50-59')
+        outputFile = open("../ageBasedFlatFiles/50-59yrFunds.csv", "a")
+        print('\radded to 50-59')
     if fundAge >= 60:
-        outputFile = sixtyPlusFile
-        print('added to 60+')
+        outputFile = open("../ageBasedFlatFiles/60yrPlusFunds.csv", "a")
+        print('\radded to 60+')
 
     if (not hasError):
-        outputFile.write(currentTicker.rstrip("\n") + ",")
+        outputFile.write(currentTicker.rstrip() + ",")
         outputFile.write(name + ",")
         outputFile.write(price + ",")
         outputFile.write(expenseRatio + ",")
@@ -314,19 +327,23 @@ for currentTicker in lines:
         outputFile.write(now.strftime('%Y-%m-%d'))
         outputFile.write("\n")
     else:
+        errorFile = open("../ageBasedFlatFiles/errorFile.txt","a")
         errorFile.write(currentTicker)
+        errorFile.close()
     print count,'of',len(lines),'|',len(lines)-count,'Remaining',datetime.datetime.now()
     count+=1
     continue
 
-zeroNineFile.close()
-tenNineteenFile.close()
-twentyTwentyNineFile.close()
-thirtyThirtyNineFile.close()
-fortyFortyNineFile.close()
-fiftyFiftyNineFile.close()
-sixtyPlusFile.close()
-errorFile.close()
+outputFile.close()
+
+#zeroNineFile.close()
+#tenNineteenFile.close()
+#twentyTwentyNineFile.close()
+#thirtyThirtyNineFile.close()
+#fortyFortyNineFile.close()
+#fiftyFiftyNineFile.close()
+#sixtyPlusFile.close()
+#errorFile.close()
 inputFile.close()
 
 print("All funds have been gathered.")
