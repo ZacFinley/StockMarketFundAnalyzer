@@ -329,6 +329,7 @@ for currentTicker in lines:
     else:
         errorFile = open("../ageBasedFlatFiles/errorFile.txt","a")
         errorFile.write(currentTicker)
+        errorFile.write("\n")
         errorFile.close()
     print count,'of',len(lines),'|',len(lines)-count,'Remaining',datetime.datetime.now()
     count+=1
