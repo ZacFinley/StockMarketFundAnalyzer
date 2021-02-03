@@ -55,29 +55,11 @@ def writeHeader(outputFile):
     outputFile.write("Capture Date")
     outputFile.write("\n")
 
-# Open file that holds 0-9 year old funds
-#zeroNineFile = open("../ageBasedFlatFiles/0-9yrFunds.csv", "a")
-#writeHeader(zeroNineFile)
-# Open file that holds 10-19 year old funds
-#tenNineteenFile = open("../ageBasedFlatFiles/10-19yrFunds.csv", "a")
-#writeHeader(tenNineteenFile)
-# Open file that holds 20-29 year old funds
-#twentyTwentyNineFile = open("../ageBasedFlatFiles/20-29yrFunds.csv", "a")
-#writeHeader(twentyTwentyNineFile)
-# Open file that holds 30-39 year old funds
-#thirtyThirtyNineFile = open("../ageBasedFlatFiles/30-39yrFunds.csv", "a")
-#writeHeader(thirtyThirtyNineFile)
-# Open file that holds 40-49 year old funds
-#fortyFortyNineFile = open("../ageBasedFlatFiles/40-49yrFunds.csv", "a")
-#writeHeader(fortyFortyNineFile)
-# Open file that holds 50-59 year old funds
-#fiftyFiftyNineFile = open("../ageBasedFlatFiles/50-59yrFunds.csv", "a")
-#writeHeader(fiftyFiftyNineFile)
-# Open file that holds 60+ year old funds
-#sixtyPlusFile = open("../ageBasedFlatFiles/60yrPlusFunds.csv", "a")
-#writeHeader(sixtyPlusFile)
-# Open file for manual review funds
-#errorFile = open("../ageBasedFlatFiles/errorFile.txt","a")
+def notApplicableLogic(input):
+    if "N/" in input:
+        return "-1"
+    else:
+        return input
 
 now = datetime.datetime.now()
 isMutualFund = False
@@ -109,6 +91,7 @@ for currentTicker in lines:
         netAssets = driverProfile.find_element_by_xpath('//*[@id="Col1-0-Profile-Proxy"]/section/div[2]/div[1]/div/div[3]/span[2]').text
         # Take the last char off it is a '%'
         holdingsTurnover = driverProfile.find_element_by_xpath('//*[@id="Col1-0-Profile-Proxy"]/section/div[2]/div[2]/div/div[3]/span[2]').text[:-1]
+        holdingsTurnover = holdingsTurnover.replace(',','')
         # Date format YYYY-MM-DD
         inceptionDate = driverProfile.find_element_by_xpath('//*[@id="Col1-0-Profile-Proxy"]/section/div[2]/div[1]/div/div[7]/span[2]/span').text
         if "-" not in inceptionDate and "." not in inceptionDate:
@@ -257,6 +240,9 @@ for currentTicker in lines:
         hasError = True
         print(currentTicker + ' Purchase Info Error')
 
+#    driverProfile.quit()
+#    driverHoldings.quit()
+#    driverPerformance.quit()
     driverPurchInfo.quit()
 
     fundAge = (now.year - int(inceptionDate[:4]))
@@ -290,38 +276,38 @@ for currentTicker in lines:
         outputFile.write(category + ",")
         outputFile.write(str(morningStar) + ",")
         outputFile.write(netAssets + ",")
-        outputFile.write(holdingsTurnover + ",")
+        outputFile.write(notApplicableLogic(holdingsTurnover) + ",")
         outputFile.write(inceptionDate + ",")
         outputFile.write(fundFamily + ",")
-        outputFile.write(cash + ",")
-        outputFile.write(stocks + ",")
-        outputFile.write(bonds + ",")
-        outputFile.write(others + ",")
-        outputFile.write(preferred + ",")
-        outputFile.write(convertable + ",")
-        outputFile.write(basicMaterials + ",")
-        outputFile.write(consumerCyclical + ",")
-        outputFile.write(financialServices + ",")
-        outputFile.write(realestate + ",")
-        outputFile.write(consumerDefensive + ",")
-        outputFile.write(healthcare + ",")
-        outputFile.write(utilities + ",")
-        outputFile.write(communicationServices + ",")
-        outputFile.write(energy + ",")
-        outputFile.write(industrials + ",")
-        outputFile.write(technology + ",")
-        outputFile.write(numOfYearsUp + ",")
-        outputFile.write(numOfYearsDown + ",")
-        outputFile.write(yearToDate + ",")
-        outputFile.write(oneMonth + ",")
-        outputFile.write(threeMonth + ",")
-        outputFile.write(oneYear + ",")
-        outputFile.write(threeYear + ",")
-        outputFile.write(fiveYear + ",")
-        outputFile.write(tenYear + ",")
+        outputFile.write(notApplicableLogic(cash) + ",")
+        outputFile.write(notApplicableLogic(stocks) + ",")
+        outputFile.write(notApplicableLogic(bonds) + ",")
+        outputFile.write(notApplicableLogic(others) + ",")
+        outputFile.write(notApplicableLogic(preferred) + ",")
+        outputFile.write(notApplicableLogic(convertable) + ",")
+        outputFile.write(notApplicableLogic(basicMaterials) + ",")
+        outputFile.write(notApplicableLogic(consumerCyclical) + ",")
+        outputFile.write(notApplicableLogic(financialServices) + ",")
+        outputFile.write(notApplicableLogic(realestate) + ",")
+        outputFile.write(notApplicableLogic(consumerDefensive) + ",")
+        outputFile.write(notApplicableLogic(healthcare) + ",")
+        outputFile.write(notApplicableLogic(utilities) + ",")
+        outputFile.write(notApplicableLogic(communicationServices) + ",")
+        outputFile.write(notApplicableLogic(energy) + ",")
+        outputFile.write(notApplicableLogic(industrials) + ",")
+        outputFile.write(notApplicableLogic(technology) + ",")
+        outputFile.write(notApplicableLogic(numOfYearsUp) + ",")
+        outputFile.write(notApplicableLogic(numOfYearsDown) + ",")
+        outputFile.write(notApplicableLogic(yearToDate) + ",")
+        outputFile.write(notApplicableLogic(oneMonth) + ",")
+        outputFile.write(notApplicableLogic(threeMonth) + ",")
+        outputFile.write(notApplicableLogic(oneYear) + ",")
+        outputFile.write(notApplicableLogic(threeYear) + ",")
+        outputFile.write(notApplicableLogic(fiveYear) + ",")
+        outputFile.write(notApplicableLogic(tenYear) + ",")
         outputFile.write("NULL,")
-        outputFile.write(minInitInv + ",")
-        outputFile.write(minSubInv + ",")
+        outputFile.write(notApplicableLogic(minInitInv) + ",")
+        outputFile.write(notApplicableLogic(minSubInv) + ",")
         outputFile.write(str(isMutualFund) + ",")
         outputFile.write(str(isEtf) + ",")
         outputFile.write(now.strftime('%Y-%m-%d'))
