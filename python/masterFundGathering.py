@@ -73,6 +73,7 @@ lines = inputFile.readlines()
 count = 1
 
 for currentTicker in lines:
+    hasError = False
     currentTicker = currentTicker.rstrip("\n")
     # Profile driver
     driverProfile = webdriver.Chrome()
